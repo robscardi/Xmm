@@ -26,10 +26,10 @@ window::window(connection& c, CARD32 parent, INT16 x, INT16 y, CARD16 width,
 
 	opt_num = options_list.size();
 	
-	CARD16 lenght = sizeof(CreateWindow_PDU) + opt_num*4; 
+	CARD16 lenght = 8 + opt_num; 
 
 	request_header header = {
-		OPCODE::CreateWindow, 0, lenght +sizeof(request_header)
+		OPCODE::CreateWindow, 0, lenght
 	};
 	con.send<request_header>(&header, sizeof(request_header));
 	con.send<CreateWindow_PDU>(&properties, sizeof(CreateWindow_PDU) );

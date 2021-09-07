@@ -11,7 +11,7 @@ int main(void)
         auto root = con.VecScreen[0].root;
         auto root_visual = con.VecScreen[0].root_visual;
         
-        auto gcon = X11::gcontex(con, root, X11::GC_bitmask::graphics_exposures,{0});
+        //auto gcon = X11::gcontex(con, root, X11::GC_bitmask::graphics_exposures,{0});
         X11::window win(con, root, 0, 0, 320, 240, 0, X11::window::class_::Copy_From_Parent, root_visual, X11::bitmask_value::background_pixel, opt);
 
         
@@ -22,6 +22,6 @@ int main(void)
 
 
         while (true);
-        
+
         return 0;
 };
