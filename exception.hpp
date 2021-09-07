@@ -7,13 +7,20 @@
 #include "struct.hpp"
 
 
-using namespace X11;
+namespace X11{
+
+
+
+
+
+
 class base_exception : public std::exception{
         public:
-        base_exception(const wchar_t* file, int line) :
+        base_exception(const char* file, int line, std::string mes) :
                 File(file),
-                Line(line){};
-        std::wstring GetFile(){
+                Line(line),
+                message(mes){};
+        std::string GetFile(){
                 return File;
         };
         int GetLine(){
@@ -21,65 +28,93 @@ class base_exception : public std::exception{
         };
         
 
-        virtual void Message(std::string s){
-                std::cout << s;
+        virtual void Message(){
+                std::cout << "Message: ";
+                if (message.size())
+                        std::cout << message;
+                else std::cout << "NONE" <<std::endl; 
         };
 
         protected:
-        std::wstring File;
+        std::string File;
         int Line;
+        std::string message;
 };
 
 class Server_error : public base_exception{
         public:
-        Server_error(const wchar_t* file, int line, error_struct er_strct):
+        Server_error(error_struct er_strct, const char* file, int line, std::string message = nullptr):
 
-                base_exception(file, line),
+                base_exception(file, line, message),
                 error_(er_strct)
                 {
                         switch(error_.code){
                                 case 1 :
                                 error_name = "Request";
+                                break;
                                 case 2 :
                                 error_name = "Value";
+                                break;
                                 case 3 :
                                 error_name = "Window";
+                                break;
                                 case 4 :
                                 error_name = "Pixmap";
+                                break;
                                 case 5 :
                                 error_name = "atom";
+                                break;
                                 case 6 : 
                                 error_name = "Cursor";
+                                break;
                                 case 7 :
                                 error_name = "Font";
+                                break;
                                 case 8 :
                                 error_name = "Match";
+                                break;
                                 case 9 :
                                 error_name = "Drawable";
+                                break;
                                 case 10 :
                                 error_name = "Access";
+                                break;
                                 case 11 :
                                 error_name = "Alloc";
+                                break;
                                 case 12 :
                                 error_name = "Colormap";
+                                break;
                                 case 13 : 
                                 error_name = "Graphical Context";
+                                break;
                                 case 14 :
                                 error_name = "IDChoice" ;
+                                break;
                                 case 15 :
                                 error_name = "Name";
+                                break;
                                 case 16 :
                                 error_name = "Lenght";
+                                break;
                                 case 17 :
                                 error_name = "Implementation";
+                                break;
+                                default: 
+                                error_name = "Unknown Error";
+                                break;
                         }
-                        error_name += " error";
                 };
         
         void Message(){
                 using namespace std;
                 cout << "Server Error" << endl;
                 cout << "Error Type: " << error_name << endl;
+                cout << "Sequence Number = " << error_.sequence_number << endl;
+                std::cout << "Message: " << endl;
+                if (message.size())
+                        std::cout << message;
+                else std::cout << "NONE" <<std::endl; 
         };
 
 
@@ -88,5 +123,5 @@ class Server_error : public base_exception{
         std::string error_name;
 };
 
-
+}
 #endif

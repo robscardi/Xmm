@@ -6,6 +6,69 @@
 
 namespace X11{
 
+
+#define response_size 32
+
+
+
+enum OPCODE : int{
+	CreateWindow = 1,
+	ChangeWindowAttribute,
+	GetWindowAttribute,
+	DestroyWindow,
+	DestroySubwindows,
+	ChangeSaveSet,
+	ReparentWindow,
+	MapWindow,
+	MapSubWindows,
+	UnmapWindow,
+	UnmapSubwindows,
+
+
+	//*****
+
+	CreateGC = 16
+
+
+};
+
+
+
+
+typedef int8_t INT8;
+typedef int16_t INT16;
+typedef int32_t INT32;
+typedef int64_t INT64;
+
+typedef uint8_t CARD8;
+typedef uint16_t CARD16;
+typedef uint32_t CARD32;
+typedef uint64_t CARD64;
+
+typedef CARD32 WINDOW;
+typedef CARD8 BOOL;
+typedef CARD32 PIXMAP;
+typedef CARD32 COLORMAP;
+typedef CARD32 CURSOR;
+typedef CARD32 VISUALID;
+
+typedef CARD8 BITGRAVITY;
+typedef CARD8 WINGRAVITY;
+
+typedef CARD32 TIMESTAMP;
+typedef CARD32 BITMASK;
+typedef CARD32 GCONTEXT;
+typedef CARD32 DRAWABLE;
+typedef CARD32 FONTABLE;
+typedef CARD32 ATOM;
+
+
+typedef struct __attribute__((packed)){
+	CARD8 code;
+	CARD8 pad;
+	CARD16 data;
+}response_struct;
+
 typedef struct __attribute__((packed)) {
     uint8_t order;
     uint8_t pad1;
@@ -53,7 +116,7 @@ typedef struct __attribute__((packed)) {
     uint8_t scanline_unit, scanline_pad;
     uint8_t keycode_min, keycode_max;
     uint32_t pad;
-    char vendor_string[1];
+    char vendor_string[20];
 } connection_reply_success_body_t;
 
 
@@ -66,15 +129,82 @@ typedef struct __attribute__((packed)) {
 
 
 typedef struct __attribute__((packed)) {
-    uint8_t group;
-    uint8_t bits;
-    uint16_t colormap_entries;
-    uint32_t mask_red, mask_green, mask_blue;
-    uint32_t pad;
+    	uint8_t group;
+    	uint8_t bits;
+    	uint16_t colormap_entries;
+    	uint32_t mask_red, mask_green, mask_blue;
+    	uint32_t pad;
 } visual_t;
 
-// End of X11 protocol definitions
-//
+
+typedef struct __attribute__((packed)){
+	CARD8 major_opcode;
+	CARD8 pad;
+	CARD16 lenght;
+}request_header;
+
+
+typedef struct __attribute__((packed)){
+	CARD8 Error;
+	CARD8 code;
+	CARD16 sequence_number;
+	CARD32 error_data;
+	CARD8 minor_opcode;
+	CARD16 major_opcode;
+}error_struct;
+
+typedef struct __attribute__((packed)){
+	CARD8 depth;
+	CARD8 bits_per_pixel;
+	CARD8 scanline_pad;
+	CARD8 unused[5];
+}FORMAT;
+
+
+typedef struct __attribute__((packed)){
+	WINDOW root;
+	COLORMAP default_colormap;
+	CARD32 white_pixel;
+	CARD32 black_pixel;
+	CARD32 current_input_mask;
+	CARD16 width_in_pixel;
+	CARD16 height_in_pixel;
+	CARD16 width_in_millimeter;
+	CARD16 height_in_millimeter;
+	CARD16 min_installed_maps;
+	CARD16 max_installed_maps;
+	VISUALID root_visual;
+	CARD8 backing_store;
+	BOOL saves_under;
+	CARD8 root_depth;
+	CARD8 number_of_DEPTH;
+}SCREEN;
+
+typedef struct __attribute__((packed)){
+	CARD8 depth;
+	CARD8 pad;
+	CARD16 number_of_VISUALTYPE;
+	CARD32 pad2;
+}DEPTH;
+
+typedef struct __attribute__((packed)){
+	VISUALID visual_id;
+	CARD8 class_;
+	CARD8 bits_per_rgb_value;
+	CARD16 colormap_entries;
+	CARD32 red_mask;
+	CARD32 green_mask;
+	CARD32 blue_mask;
+	CARD32 pad;
+}VISUALTYPE;
+
+
+
+
+
+
+
+
 
 
 

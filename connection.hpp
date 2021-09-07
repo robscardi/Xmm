@@ -7,12 +7,17 @@
 #include <sys/un.h>
 #include <unistd.h>
 #include <stdio.h>
-#include "struct.hpp"
 
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <stdlib.h>
+#include <vector>
+#include <type_traits>
+
+
+#include "struct.hpp"
+#include "exception.hpp"
 
 namespace X11{
 
@@ -20,6 +25,8 @@ namespace X11{
 #define _ORDER 'l'
 #define _PROT_MAJOR_VERSION 11
 #define _PROT_MINOR_VERSION 0
+//#define _SOCAT_DEBUG
+
 
 #ifdef _SOCAT_DEBUG
         #define _SOCKET_FILE "/tmp/socat-listen"
@@ -34,15 +41,39 @@ namespace X11{
 class connection{
         public:
         connection();
+        
+        template<typename T>
+        requires std::is_trivial<T>::value
+        size_t send(T* data, size_t size){
+                size_t s = write(socket_fd, data, size);
+                return s;
+        };
 
-        size_t send();
-        size_t receive();
+        template<typename T>
+        requires std::is_trivial<T>::value
+        size_t receive(T* data, size_t size){
+                size_t s = recv(socket_fd, data, size, 0);
+                return s;
+        };
+
+        size_t generate_next_id(){
+                return curr_resource_id++;
+        };
+
+        
 
         private:
         int socket_fd;
+        int curr_resource_id = 0;
         X11::connection_reply_header_t header;
         X11::connection_reply_success_body_t body;
-
+        public:
+        std::vector<FORMAT> VecFormat;
+        std::vector<SCREEN> VecScreen;
+        std::vector<DEPTH> VecDepth;
+        std::vector<VISUALTYPE> VecVisualtype;
+        
+          
 
 
 };

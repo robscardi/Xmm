@@ -14,25 +14,30 @@ X11::gcontex::gcontex(connection& con, DRAWABLE drawable, BITMASK bitmask, std::
         list_of_options.shrink_to_fit();
         id = c.generate_next_id();
         
-        int value_num = 0;
-        for (int x = 0; x < sizeof(BITMASK); x++){
-                if(mask & 1<<x){
-                        value_num++;
-                }
-        }
+
+
         CreateGC_PDU msg{
                 id, drawable, mask
         };
         
-        request_header head;
+        request_header head = {0};
         head.major_opcode = OPCODE::CreateGC;
-        head.lenght = sizeof(CreateGC_PDU) + value_num*4 +sizeof(request_header);
+        head.lenght = list_of_options.size() +sizeof(request_header);
 
         c.send<request_header>(&head, sizeof(request_header));
-        c.send<CreateGC_PDU>(&msg, sizeof(msg));
-        c.send<CARD32>(list_of_options.data(), list_of_options.size());
+        c.send<CreateGC_PDU>(&msg, sizeof(CreateGC_PDU));
+        c.send<CARD32>(list_of_options.data(), list_of_options.size()*sizeof(CARD32));
+	
+        CARD8 response[response_size];
+	con.receive<CARD8>(response, response_size);
 
-        
+	if(response[0] == 0){
+		auto CN = reinterpret_cast<error_struct*>(response);
+		throw Server_error(*CN, __FILE__, __LINE__, "Unable to create Graphical Context" );
+
+	}
+
+
 };
 
 
