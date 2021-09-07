@@ -6,7 +6,7 @@ int main(void)
 {
         try{
         auto con = X11::connection();
-        auto opt = std::initializer_list<X11::CARD32>{0xff00ff};
+        auto opt = std::initializer_list<X11::CARD32>{0x00FFFF};
 
         auto root = con.VecScreen[0].root;
         auto root_visual = con.VecScreen[0].root_visual;
@@ -16,7 +16,7 @@ int main(void)
 
         
         while (true);
-        
+
         } catch(X11::base_exception& e){
                 e.Message();
         };

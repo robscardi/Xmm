@@ -31,11 +31,11 @@ X11::gcontex::gcontex(connection& con, DRAWABLE drawable, BITMASK bitmask, std::
         CARD8 response[response_size];
 	con.receive<CARD8>(response, response_size);
 
-	if(response[0] == 0){
+	/*if(response[0] == 0){
 		auto CN = reinterpret_cast<error_struct*>(response);
 		throw Server_error(*CN, __FILE__, __LINE__, "Unable to create Graphical Context" );
 
-	}
+	}*/
 
 
 };

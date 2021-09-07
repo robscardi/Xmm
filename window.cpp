@@ -34,19 +34,15 @@ window::window(connection& c, CARD32 parent, INT16 x, INT16 y, CARD16 width,
 	con.send<request_header>(&header, sizeof(request_header));
 	con.send<CreateWindow_PDU>(&properties, sizeof(CreateWindow_PDU) );
 	con.send<CARD32>(options_list.data(), opt_num*4);
-	
+	MapWindow();
 
 	CARD8 response[response_size];
 	con.receive<CARD8>(response, response_size);
-	if(response[0] == 16){
-		auto CN = reinterpret_cast<CreateNotify*>(response);
-		parent = CN->parent;
-		MapWindow();
-	}else if(response[0] == 0){
+	/*if(response[0] == 0){
 		auto CN = reinterpret_cast<error_struct*>(response);
 		throw Server_error(*CN, __FILE__, __LINE__, "Unable to create window" );
 
-	}
+	}*/
 };
 
 
