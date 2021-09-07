@@ -57,7 +57,7 @@ window::~window(){
 };
 
 void window::MapWindow(){
-	request_header header {OPCODE::MapWindow, 0, (CARD16)(sizeof(request_header) +4)};
+	request_header header {OPCODE::MapWindow, 0, 2};
 	con.send<request_header>(&header, sizeof(header));
 	con.send<CARD32>(&window_id, 4);
 }
