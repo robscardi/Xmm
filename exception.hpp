@@ -111,10 +111,11 @@ class Server_error : public base_exception{
                 cout << "Server Error" << endl;
                 cout << "Error Type: " << error_name << endl;
                 cout << "Sequence Number = " << error_.sequence_number << endl;
-                std::cout << "Message: " << endl;
+                cout << "Message: ";
                 if (message.size())
-                        std::cout << message;
-                else std::cout << "NONE" <<std::endl; 
+                        cout << message << endl;
+                else cout << "NONE" <<endl;
+                cout << "File : " << File << "    " << "Line : " << Line << endl;
         };
 
 

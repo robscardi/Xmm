@@ -52,11 +52,11 @@ class gcontex{
         gcontex(connection& con, DRAWABLE drawable, BITMASK bitmask, std::initializer_list<CARD32> init_list );
 
         private:
-        DRAWABLE drawable;
-        connection& c;
-        GCONTEXT id;
         BITMASK mask;
         std::vector<CARD32> list_of_options;
+        connection& c;
+        DRAWABLE drawable;
+        GCONTEXT id;
 };
 
 

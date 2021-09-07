@@ -51,9 +51,9 @@ window::window(connection& c, CARD32 parent, INT16 x, INT16 y, CARD16 width,
 
 
 window::~window(){
-	delete[] option_on_creation;
 	std::cout << "Destroying window " << window_id << std::endl;
 	//UnmapWindow();
+	//DestroyWindow();
 };
 
 void window::MapWindow(){
@@ -68,18 +68,6 @@ void window::UnmapSubwindow(){
 
 };
 
-
-
-
-CARD32* window::create_option_array(std::initializer_list<CARD32> list){
-	CARD32* arr = new CARD32[list.size()];
-	int x = 0;
-	for(auto n : list){
-		arr[x] = n;
-		x++;
-	};
-	return arr;
-};
 
 
 

@@ -68,9 +68,8 @@ class window{
 	window() = delete;
 	window(X11::connection& c, CARD32 parent, INT16 x, INT16 y, CARD16 width,
 		CARD16 height, CARD16 border_width, CARD16 _class, VISUALID visual_id, CARD32 BITMASK, std::initializer_list<CARD32>options);
-	window(X11::connection& con, CreateWindow_PDU& win_req, CARD32* options);
+	window(X11::connection& con, CreateWindow_PDU& win_req, std::initializer_list<CARD32>options);
 	window(window& win) = delete;
-	static CARD32* create_option_array(std::initializer_list<CARD32>);
 	void MapWindow();
 	void UnmapWindow();
 	void MapSubwindow();
@@ -86,13 +85,14 @@ class window{
 
 
 	~window();
+	
 	private:
+	void DestroyWindow();
 	std::vector<CARD32> options_list;
 	connection& con;
 	CARD32 window_id;
 	CARD32 parent;
 	CreateWindow_PDU properties;
-	CARD32* option_on_creation; 
 	int opt_num;
 
 
