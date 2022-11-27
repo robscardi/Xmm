@@ -4,7 +4,10 @@
 
 #include "gcontext.hpp"
 
-X11::gcontex::gcontex(connection& con, DRAWABLE drawable, BITMASK bitmask, std::initializer_list<CARD32> init_list)
+using namespace X11;
+
+template<ConnectionClass connection>
+gcontex<connection>::gcontex(connection& con, DRAWABLE drawable, BITMASK bitmask, std::initializer_list<CARD32> init_list)
         :
         mask(bitmask),
         list_of_options(init_list),
@@ -24,18 +27,19 @@ X11::gcontex::gcontex(connection& con, DRAWABLE drawable, BITMASK bitmask, std::
         head.major_opcode = OPCODE::CreateGC;
         head.lenght = list_of_options.size() +sizeof(request_header);
 
-        c.send<request_header>(&head, sizeof(request_header));
-        c.send<CreateGC_PDU>(&msg, sizeof(CreateGC_PDU));
-        c.send<CARD32>(list_of_options.data(), list_of_options.size()*sizeof(CARD32));
+        c.template send<request_header*>(&head, sizeof(request_header));
+        c.template send<CreateGC_PDU*>(&msg, sizeof(CreateGC_PDU));
+        c.template send<CARD32*>(list_of_options.data(), list_of_options.size()*sizeof(CARD32));
 	
-        CARD8 response[response_size];
-	con.receive<CARD8>(response, response_size);
 
-	/*if(response[0] == 0){
+        CARD8 response[response_size] = {1};
+	c.template receive<CARD8*>(response, response_size);
+
+	if(response[0] == 0){
 		auto CN = reinterpret_cast<error_struct*>(response);
 		throw Server_error(*CN, __FILE__, __LINE__, "Unable to create Graphical Context" );
 
-	}*/
+	}
 
 
 };

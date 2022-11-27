@@ -2,6 +2,7 @@
 #define __WINDOW_HPP_GUARD
 #include "connection.hpp"
 #include "struct.hpp"
+#include "event.hpp"
 #include <memory>
 #include <initializer_list>
 
@@ -39,7 +40,7 @@ enum backing_store : CARD32{
 
 
 
-typedef struct __attribute__((packed)) {
+typedef struct{
 	CARD32 id;
 	CARD32 parent;
 	INT16 x, y;
@@ -48,28 +49,22 @@ typedef struct __attribute__((packed)) {
 	CARD16 _class;
 	VISUALID visual_id;
 	CARD32 BITMASK;
-}CreateWindow_PDU;
+}create_window_PDU;
 
 
-
-typedef struct __attribute__((packed)){
-	WINDOW parent;
-	WINDOW window_id;
-	INT16 x, y;
-	CARD16 width, height, border_width;
-	BOOL override_redirect;
-	CARD8 pad2[9];
-}CreateNotify;
-
-
-
-class window{
+template<ConnectionClass connection>
+class basic_window{
 	public:
-	window() = delete;
-	window(X11::connection& c, CARD32 parent, INT16 x, INT16 y, CARD16 width,
+	basic_window() = delete;
+	basic_window(connection& c, CARD32 parent, INT16 x, INT16 y, CARD16 width,
 		CARD16 height, CARD16 border_width, CARD16 _class, VISUALID visual_id, CARD32 BITMASK, std::initializer_list<CARD32>options);
-	window(X11::connection& con, CreateWindow_PDU& win_req, std::initializer_list<CARD32>options);
-	window(window& win) = delete;
+	basic_window(connection& con, create_window_PDU& win_req, std::initializer_list<CARD32>options);
+	basic_window(basic_window& win) = delete;
+	~basic_window();
+
+
+
+	public:
 	void MapWindow();
 	void UnmapWindow();
 	void MapSubwindow();
@@ -77,24 +72,23 @@ class window{
 
 
 	public:
-	enum class_ : CARD16 {
+	enum _class : CARD16 {
 		Copy_From_Parent = 0,
 		Input_Output, 
 		Only_Input
 	};
 
 
-	~window();
 	
 	private:
 	void DestroyWindow();
+	void DestroySubwindows();
 	std::vector<CARD32> options_list;
 	connection& con;
 	CARD32 window_id;
 	CARD32 parent;
-	CreateWindow_PDU properties;
+	create_window_PDU properties;
 	int opt_num;
-
 
 };
 
@@ -103,6 +97,7 @@ class window{
 
 }
 
+#include "window.cpp"
 
 
 #endif

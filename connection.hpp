@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <type_traits>
+#include <concepts>
 
 
 #include "struct.hpp"
@@ -37,22 +38,29 @@ namespace X11{
 
 
 
+template <typename T>
+concept ConnectionClass = requires(T t, size_t s){
+        {t.send([]{struct S{}; return S{};}(), s)} -> std::convertible_to<size_t>;
+        {t.receive([]{struct S{}; return S{};}(), s)} -> std::convertible_to<size_t>;
+};
+
 
 class connection{
         public:
         connection();
         
         template<typename T>
-        requires std::is_trivial<T>::value
-        size_t send(T* data, size_t size){
+        size_t send(T data, size_t size){
                 size_t s = write(socket_fd, data, size);
+                if (s != size){
+                        throw send_error();
+                };
                 return s;
         };
 
         template<typename T>
-        requires std::is_trivial<T>::value
-        size_t receive(T* data, size_t size){
-                size_t s = recv(socket_fd, data, size, 0);
+        size_t receive(T data, size_t size){
+                size_t s = recv(socket_fd, data, size, MSG_DONTWAIT);
                 return s;
         };
 

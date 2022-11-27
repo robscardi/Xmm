@@ -46,7 +46,7 @@ typedef struct __attribute((packed)){
 
 
 
-
+template<ConnectionClass connection>
 class gcontex{
         public:
         gcontex(connection& con, DRAWABLE drawable, BITMASK bitmask, std::initializer_list<CARD32> init_list );
@@ -63,5 +63,6 @@ class gcontex{
 
 }
 
+#include "gcontext.cpp"
 
 #endif

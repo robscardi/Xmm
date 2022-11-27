@@ -23,11 +23,17 @@ enum OPCODE : int{
 	MapSubWindows,
 	UnmapWindow,
 	UnmapSubwindows,
+	ConfigureWindow,
+	CirculateWindow,
+	GetGeometry,
+	QueryTree,
+	InternAtom,
+	
 
 
 	//*****
 
-	CreateGC = 16
+	CreateGC = 55
 
 
 };
@@ -63,13 +69,13 @@ typedef CARD32 FONTABLE;
 typedef CARD32 ATOM;
 
 
-typedef struct __attribute__((packed)){
+typedef struct {
 	CARD8 code;
 	CARD8 pad;
 	CARD16 data;
 }response_struct;
 
-typedef struct __attribute__((packed)) {
+typedef struct  {
     uint8_t order;
     uint8_t pad1;
     uint16_t major_version, minor_version;
@@ -79,7 +85,7 @@ typedef struct __attribute__((packed)) {
 } connection_request;
 
 
-typedef struct __attribute__((packed)) {
+typedef struct  {
     uint32_t root_id;
     uint32_t colormap;
     uint32_t white, black;
@@ -95,7 +101,7 @@ typedef struct __attribute__((packed)) {
 } screen_t;
 
 
-typedef struct __attribute__((packed)) {
+typedef struct  {
     uint8_t depth;
     uint8_t bpp;
     uint8_t scanline_pad;
@@ -103,7 +109,7 @@ typedef struct __attribute__((packed)) {
 } pixmap_format_t;
 
 
-typedef struct __attribute__((packed)) {
+typedef struct  {
     uint32_t release;
     uint32_t id_base, id_mask;
     uint32_t motion_buffer_size;
@@ -120,7 +126,7 @@ typedef struct __attribute__((packed)) {
 } connection_reply_success_body_t;
 
 
-typedef struct __attribute__((packed)) {
+typedef struct  {
     uint8_t success;
     uint8_t pad;
     uint16_t major_version, minor_version;
@@ -128,7 +134,7 @@ typedef struct __attribute__((packed)) {
 } connection_reply_header_t;
 
 
-typedef struct __attribute__((packed)) {
+typedef struct  {
     	uint8_t group;
     	uint8_t bits;
     	uint16_t colormap_entries;
@@ -137,14 +143,14 @@ typedef struct __attribute__((packed)) {
 } visual_t;
 
 
-typedef struct __attribute__((packed)){
+typedef struct {
 	CARD8 major_opcode;
 	CARD8 pad;
 	CARD16 lenght;
 }request_header;
 
 
-typedef struct __attribute__((packed)){
+typedef struct {
 	CARD8 Error;
 	CARD8 code;
 	CARD16 sequence_number;
@@ -153,7 +159,7 @@ typedef struct __attribute__((packed)){
 	CARD16 major_opcode;
 }error_struct;
 
-typedef struct __attribute__((packed)){
+typedef struct {
 	CARD8 depth;
 	CARD8 bits_per_pixel;
 	CARD8 scanline_pad;
@@ -161,7 +167,7 @@ typedef struct __attribute__((packed)){
 }FORMAT;
 
 
-typedef struct __attribute__((packed)){
+typedef struct {
 	WINDOW root;
 	COLORMAP default_colormap;
 	CARD32 white_pixel;
@@ -179,15 +185,14 @@ typedef struct __attribute__((packed)){
 	CARD8 root_depth;
 	CARD8 number_of_DEPTH;
 }SCREEN;
-
-typedef struct __attribute__((packed)){
+typedef struct {
 	CARD8 depth;
 	CARD8 pad;
 	CARD16 number_of_VISUALTYPE;
 	CARD32 pad2;
 }DEPTH;
 
-typedef struct __attribute__((packed)){
+typedef struct{
 	VISUALID visual_id;
 	CARD8 class_;
 	CARD8 bits_per_rgb_value;

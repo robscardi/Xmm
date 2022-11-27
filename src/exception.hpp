@@ -9,11 +9,6 @@
 
 namespace X11{
 
-
-
-
-
-
 class base_exception : public std::exception{
         public:
         base_exception(const char* file, int line, std::string mes) :
@@ -123,6 +118,21 @@ class Server_error : public base_exception{
         error_struct error_;
         std::string error_name;
 };
+
+
+class send_error : public base_exception{
+        
+        public:
+        send_error()
+        :
+        base_exception("connection.hpp", 0, "error occured while sending data")
+        {};
+};
+
+
+
+
+
 
 }
 #endif

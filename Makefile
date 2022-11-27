@@ -1,35 +1,38 @@
-CFLAGS = -I
-CC = g++ -std=c++20
+CURRENT_DIR = $(shell pwd)
+
+CXXFLAGS = -I $(CURRENT_DIR) -I $(CURRENT_DIR)/src
+CXX = g++ -std=c++20 
 FILE = (wildcard *.cpp)
 
+
 main : libXMM.so.1
-	$(CC) -Wall -g -c main.cpp -o main.o
-	$(CC) -g -o main main.o -L. -lXMM
+	$(CXX) $(CXXFLAGS) -Wall -g -c main.cpp -o main.o
+	$(CXX) -g -o main main.o -L. -lXMM
 
 
 libXMM.so.1 : XMM.o
-	$(CC) -shared -Wl,-soname,libXMM.so.1 -o libXMM.so.1 XMM.o -lc 
-	#/sbin/ldconfig -n . \
+	$(CXX) -shared -Wl,-soname,libXMM.so.1 -o libXMM.so.1 XMM.o -lc 
+	sudo /sbin/ldconfig 
 	ln -sf libXMM.so.1 libXMM.so
 
-XMM.o : window.o connection.o gcontex.o
-	ld -Ur  window.o connection.o gcontex.o -o XMM.o
+XMM.o : window.o connection.o gcontext.o
+	ld -Ur  window.o connection.o gcontext.o -o XMM.o
 
-gcontex.o : gcontex.cpp connection.cpp
-	$(CC) -c -g -Wall -fPIC gcontex.cpp
+gcontext.o : src/gcontext.cpp src/connection.cpp
+	$(CXX) -c -g $(CXXFLAGS) -Wall -fPIC src/gcontext.cpp
 
-window.o : window.cpp connection.cpp
-	$(CC) -c -g -Wall -fPIC window.cpp
+window.o : src/window.cpp src/connection.cpp
+	$(CXX) -c -g $(CXXFLAGS) -Wall -fPIC src/window.cpp
 
-connection.o : connection.cpp
-	$(CC) -c -g -Wall -fPIC connection.cpp
+connection.o : src/connection.cpp
+	$(CXX) -c -g $(CXXFLAGS) -Wall -fPIC src/connection.cpp
 
 .PHONY : clear
 
 clear : 
 	rm window.o
 	rm connection.o
-	rm gcontex.o
+	rm gcontext.o
 	rm libXMM.so.1
 	rm libXMM.so
 	rm XMM.o
