@@ -1,0 +1,7 @@
+main.c
+pippo.cpp
+trace_call_prova.txt
+*.o
+*.so
+*.so.1
+*.txt
