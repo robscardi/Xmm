@@ -1,7 +1,10 @@
 CURRENT_DIR = $(shell pwd)
+HDR = $(CURRENT_DIR)/headers
+SRC = $(CURRENT_DIR)/src
+CTN = $(SRC)/containers
 
-CXXFLAGS = -I $(CURRENT_DIR) -I $(CURRENT_DIR)/src
-CXX = g++ -std=c++20 
+CXXFLAGS = -I $(CURRENT_DIR) -I $(SRC) -I $(HDR)
+CXX = g++ -std=c++20 -D__INCLUDE__ASIO
 FILE = (wildcard *.cpp)
 
 
@@ -15,7 +18,7 @@ libXMM.so.1 : XMM.o
 	sudo /sbin/ldconfig 
 	ln -sf libXMM.so.1 libXMM.so
 
-XMM.o : window.o connection.o gcontext.o
+XMM.o : window.o connection.o gcontext.o asioconnection.o 
 	ld -Ur  window.o connection.o gcontext.o -o XMM.o
 
 gcontext.o : src/gcontext.cpp src/connection.cpp
@@ -27,16 +30,20 @@ window.o : src/window.cpp src/connection.cpp
 connection.o : src/connection.cpp
 	$(CXX) -c -g $(CXXFLAGS) -Wall -fPIC src/connection.cpp
 
+connection_asio.o : src/asioconnect.cpp
+	$(CXX) -c -g $(CXXFLAGS) -Wall -fPIC src/connection_asio.cpp
+
 .PHONY : clear
 
 clear : 
-	rm window.o
-	rm connection.o
-	rm gcontext.o
-	rm libXMM.so.1
-	rm libXMM.so
-	rm XMM.o
-	rm main.o
-	rm main
+	rm window.o || true
+	rm connection.o || true
+	rm asioconnect.o || true
+	rm gcontext.o || true
+	rm libXMM.so.1 || true
+	rm libXMM.so || true
+	rm XMM.o || true
+	rm main.o || true
+	rm main || true
 
 

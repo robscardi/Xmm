@@ -70,6 +70,7 @@ X11::connection::connection(){
         }else if(header.success == 0){
                 int lenght = header.len * 4;
                 char* failed_connection = new char[lenght];
+                receive<char*>(failed_connection, lenght);
                 std::string failed_con(failed_connection);
                 delete[] failed_connection;
                 throw base_exception(__FILE__, __LINE__, std::string("Failed Connection: \n Reason: ") + failed_con);

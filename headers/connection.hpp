@@ -18,7 +18,7 @@
 
 
 #include "struct.hpp"
-#include "exception.hpp"
+#include "src/exception.hpp"
 
 namespace X11{
 
@@ -39,9 +39,9 @@ namespace X11{
 
 
 template <typename T>
-concept ConnectionClass = requires(T t, size_t s){
-        {t.send([]{struct S{}; return S{};}(), s)} -> std::convertible_to<size_t>;
-        {t.receive([]{struct S{}; return S{};}(), s)} -> std::convertible_to<size_t>;
+concept ConnectionClass = requires(T t, std::size_t s){
+        {t.send([]{struct S{}; return S{};}(), s)} -> std::convertible_to<std::size_t>;
+        {t.receive([]{struct S{}; return S{};}(), s)} -> std::convertible_to<std::size_t>;
 };
 
 
@@ -50,7 +50,7 @@ class connection{
         connection();
         
         template<typename T>
-        size_t send(T data, size_t size){
+        size_t send(T data, std::size_t size){
                 size_t s = write(socket_fd, data, size);
                 if (s != size){
                         throw send_error();
@@ -59,7 +59,7 @@ class connection{
         };
 
         template<typename T>
-        size_t receive(T data, size_t size){
+        size_t receive(T data, std::size_t size){
                 size_t s = recv(socket_fd, data, size, MSG_DONTWAIT);
                 return s;
         };

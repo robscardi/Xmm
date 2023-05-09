@@ -1,6 +1,7 @@
 #ifndef __GUARD_STRUCT_HPP
 #define __GUARD_STRUCT_HPP
 #include <cstdint>
+#include <X11/Xproto.h>
 
 
 

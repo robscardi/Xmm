@@ -3,6 +3,7 @@
 
 
 #include "gcontext.hpp"
+#include "connection.hpp"
 
 using namespace X11;
 
