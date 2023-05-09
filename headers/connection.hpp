@@ -18,7 +18,7 @@
 
 
 #include "struct.hpp"
-#include "src/exception.hpp"
+#include "headers/exception.hpp"
 
 namespace X11{
 

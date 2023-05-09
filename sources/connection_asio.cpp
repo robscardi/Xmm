@@ -1,8 +1,8 @@
 #ifndef __CONNECTION_ASIO_CPP_GUARD
 #define __CONNECTION_ASIO_CPP_GUARD
 
-#include "connection_asio.hpp"
-#include "containers/dynamic_array.cpp"
+#include "headers/connection_asio.hpp"
+#include "containers/dynamic_array.tpp"
 
 #include <X11/Xproto.h>
 
